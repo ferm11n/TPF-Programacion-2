@@ -21,7 +21,10 @@ class EntidadVineria(ABC):
     
     @abstractmethod
     def convertirAJSON(self) -> dict:
-        pass
+        return {
+            "id": self._id,
+            "nombre": self._nombre
+        }
 
     def __eq__(self, other):
         if isinstance(other, EntidadVineria):

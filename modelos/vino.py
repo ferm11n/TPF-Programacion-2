@@ -1,6 +1,6 @@
 import json
-from modelos.EntidadVineria import EntidadVineria
-from vinoteca import Vinoteca
+from EntidadVineria import EntidadVineria
+#from vinoteca import Vinoteca
 
 class Vino(EntidadVineria):
 
@@ -39,10 +39,16 @@ class Vino(EntidadVineria):
 
     #Agregamos esto
     def obtenerBodegas(self):
+        from vinoteca import Vinoteca
         return Vinoteca.buscarBodega(self.bodega) #Con esto buscamos la bodega que esta asociada al vino
     
     def obtenerCepas(self):
+        from vinoteca import Vinoteca
         #Usa el servicio de Vinoteca para obtener todas las cepas y filtrar por las cepas
         todasLasCepas = Vinoteca.obtenerCepas(orden=None, reverso=None)
         return [cepa for cepa in todasLasCepas if cepa.obtenerId() in self.cepas]
+    
+    def obtenerPartidas(self) -> list:
+        return self._partidas
+    
     #Hasta aca

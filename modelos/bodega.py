@@ -1,5 +1,5 @@
 import json
-from modelos.EntidadVineria import EntidadVineria
+from EntidadVineria import EntidadVineria
 from vinoteca import Vinoteca
 
 
