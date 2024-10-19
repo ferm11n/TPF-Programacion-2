@@ -14,8 +14,15 @@ class Vinoteca:
 
     @classmethod
     def inicializar(cls):
-        datos = Vinoteca._parsearArchivoDeDatos()
-        Vinoteca._convertirJsonAListas(datos)
+        try:
+            datos = cls._parsearArchivoDeDatos()
+            cls._convertirJsonAListas(datos)
+        except FileNotFoundError:
+            raise Exception(f"Error: No esta el archivo {cls._archivoDeDatos}")
+        except json.JSONDecodeError:
+            raise Exception(f"Error: El archivo JSON esta mal formado")
+        except Exception as e:
+            raise Exception(f"Error inesperado {e}")
 
     @classmethod
     def obtenerBodegas(cls, orden=None, reverso=False):
@@ -99,9 +106,37 @@ class Vinoteca:
         from modelos.bodega import Bodega
         from modelos.cepa import Cepa
         from modelos.vino import Vino
-        cls.bodegas = [Bodega(**bodega) for bodega in data['bodegas']]
-        cls.cepas = [Cepa(**cepa) for cepa in data['cepas']]
-        cls.vinos = [Vino(**vino) for vino in data['vinos']]
+
+
+        #cls._bodegas = [Bodega(**bodega) for bodega in data.get('bodegas', [])]
+
+        cls._cepas = [Cepa(**cepa) for cepa in data.get('cepas', [])]
+        cls._vinos = [Vino(**vino) for vino in data.get('vinos', [])]
+
+        cls._bodegas = []
+        for bodega in data.get('bodegas', []):
+            bodegaObj = Bodega(**bodega)
+
+            #Verificamos si cepas esta en el dicc
+            if 'cepas' in bodega:
+                bodegaObj.cepas = [cls.buscarCepa(cepaId) for cepaId in bodega['cepas']]
+            else:
+                bodegaObj.cepas = [] #Asignamos lista vacia si no existe
+            
+            #Verifcamos si vinos esta en el diccionario
+            if 'vinos' in bodega:
+                bodegaObj.vinos = [cls.buscarVino(vinoId) for vinoId in bodega['vinos']]
+            else:
+                bodegaObj.vinos = [] #Asignamos la lista vacia si no existe
+
+            cls._bodegas.append(bodegaObj)
+
+            #print("Datos cargados: ", data)
+
+        #Testeos
+        """print(f"Bodegas cargas: {cls._bodegas}")
+        print(f"Cepas cargadas: {cls._cepas}")
+        print(f"Vinos cargados: {cls._vinos}")"""
 
 #Aca inicializamos la vinoteca
 Vinoteca.inicializar()

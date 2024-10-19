@@ -43,7 +43,7 @@ class Bodega(EntidadVineria):
     def obtenerVinos(self):
         #Usamos un servicio de vinoteca para poder asi obtener los vinos y filtrar por la bodega
         todosLosVinos = Vinoteca.obtenerVinos(anio=None, orden=None, reverso=None)
-        return [vino for vino in todosLosVinos  if vino.obtenerBodega().obtenerId() == self.obtenerId]
+        return [vino for vino in todosLosVinos  if vino.obtenerBodegas().obtenerId() == self.obtenerId]
     
 
     def obtenerCepas(self):

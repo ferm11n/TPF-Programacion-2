@@ -17,7 +17,7 @@ class Vino(EntidadVineria):
         return {
             "id": self.obtenerId(),
             "nombre": self.obtenerNombre(),
-            "bodega": self.obtenerBodega().obtenerNombre(),
+            "bodega": self.obtenerBodegas().obtenerNombre(),
             "cepas": self.__mapearCepas(),
             "partidas": self.__partidas,
         }
@@ -26,7 +26,7 @@ class Vino(EntidadVineria):
         return {
             "id": self.obtenerId(),
             "nombre": self.obtenerNombre(),
-            "bodega": self.obtenerBodega().obtenerNombre(),
+            "bodega": self.obtenerBodegas().obtenerNombre(),
             "cepas": self.__mapearCepas(),
             "partidas": self.__partidas,
         }
