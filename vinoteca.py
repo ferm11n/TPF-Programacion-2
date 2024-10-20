@@ -130,9 +130,9 @@ class Vinoteca:
             #print("Datos cargados: ", data)
 
         #Depurar
-        print(f"Bodegas cargas: {cls._bodegas}")
-        print(f"Cepas cargadas: {cls._cepas}")
-        print(f"Vinos cargados: {cls._vinos}")
+        #print(f"Bodegas cargas: {cls._bodegas}")
+        #print(f"Cepas cargadas: {cls._cepas}")
+        #print(f"Vinos cargados: {cls._vinos}")
 
 #Aca inicializamos la vinoteca
 Vinoteca.inicializar()
