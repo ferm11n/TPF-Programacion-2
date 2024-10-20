@@ -1,4 +1,4 @@
-from flask import Flask, Response, jsonify
+from flask import Flask, Response, jsonify, request
 import json
 
 app = Flask(__name__)
@@ -7,8 +7,8 @@ app = Flask(__name__)
 with open('vinoteca.json') as f:
     data = json.load(f)
 
-
-#BODEGA
+#SEGUNDA PARTE DEL TP
+#EJERCICIO 1
 @app.route('/api/bodegas/<string:bodega_id>', methods=['GET'])
 def getBodega(bodega_id):
     bodega = next((b for b in data['bodegas'] if b['id'] == bodega_id), None)
@@ -41,7 +41,7 @@ def getBodega(bodega_id):
     return Response(jsonResult, mimetype='application/json')
 
 
-#CEPAS
+#EJERCICIO 2
 @app.route('/api/cepas/<string:cepa_id>', methods=['GET'])
 def getCepa(cepa_id):
     #Buscar la cepa por id
@@ -64,7 +64,7 @@ def getCepa(cepa_id):
     return Response(jsonResult, mimetype='application/json')
 
 
-#VINOS
+#EJERCICIO 3
 @app.route('/api/vinos/<string:vino_id>', methods=['GET'])
 def getVino(vino_id):
     #Buscar la cepa por id
@@ -90,6 +90,76 @@ def getVino(vino_id):
 
     jsonResult = json.dumps(result, ensure_ascii=False)
     return Response(jsonResult, mimetype='application/json')
+
+#EJERCICIO 4
+@app.route('/api/vinos', methods=['GET'])
+def getVinosPorAnio():
+    anio = request.args.get('anio', type=int)
+    orden = request.args.get('orden', default='nombre')
+    reverso = request.args.get('reverso', default='no') == 'si'
+
+    #Filtramos los vinos que tegan el año especificado en partidas
+    vinosFiltrados = [v for v in data['vinos'] if anio in v['partidas']]
+
+    #Ordenamos los vinos
+    vinosFiltrados.sort(key=lambda v: v[orden], reverse=reverso)
+
+    #Construimos la lista
+    result = []
+    for vino in vinosFiltrados:
+        bodega = next((b['nombre'] for b in data['bodegas'] if b['id'] == vino['bodega']), 'bodega desconocida')
+        cepasNombres = [c['nombre'] for c in data['cepas'] if c['id'] in vino['cepas']]
+
+
+        result.append({
+            'id': vino['id'],
+            'nombre': vino['nombre'],
+            'bodega': bodega,
+            'cepas': cepasNombres,
+            'partidas': vino['partidas']
+
+        })
+
+    jsonResult = json.dumps(result, ensure_ascii=False)
+    return Response(jsonResult, mimetype='application/json')
+
+#EJERCICIO 5
+@app.route('/api/vinos', methods=['GET'])
+def getVinosPorAnioFiltrados():
+    anio = request.args.get('anio', type=int)
+    orden = request.args.get('orden', default='nombre')
+    reverso = request.args.get('reverso', default='no') == 'si'
+
+    #Filtramos los vinos que tegan el año especificado en partidas
+    vinosFiltrados = [v for v in data['vinos'] if anio in v['partidas']]
+
+    #Ordenamos los vinos
+    vinosFiltrados.sort(key=lambda v: v[orden], reverse=reverso)
+
+    #Construimos la lista
+    result = []
+    for vino in vinosFiltrados:
+        bodega = next((b['nombre'] for b in data['bodegas'] if b['id'] == vino['bodega']), 'bodega desconocida')
+        cepasNombres = [c['nombre'] for c in data['cepas'] if c['id'] in vino['cepas']]
+
+
+        result.append({
+            'id': vino['id'],
+            'nombre': vino['nombre'],
+            'bodega': bodega,
+            'cepas': cepasNombres,
+            'partidas': vino['partidas']
+
+        })
+
+    return jsonify(result)
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
