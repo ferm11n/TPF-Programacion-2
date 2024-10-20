@@ -117,26 +117,22 @@ class Vinoteca:
         for bodega in data.get('bodegas', []):
             bodegaObj = Bodega(**bodega)
 
-            #Verificamos si cepas esta en el dicc
-            if 'cepas' in bodega:
+            #Solamente vamos a asociar cepas si la lista 'cepas' existe y no esta vacia
+            if 'cepas' in bodega and bodega['cepas']:
                 bodegaObj.cepas = [cls.buscarCepa(cepaId) for cepaId in bodega['cepas']]
-            else:
-                bodegaObj.cepas = [] #Asignamos lista vacia si no existe
             
-            #Verifcamos si vinos esta en el diccionario
-            if 'vinos' in bodega:
+            #Solamente vamos a asociar vinos si la lista 'vinos' existe y no esta vacia
+            if 'vinos' in bodega and bodega['vinos']:
                 bodegaObj.vinos = [cls.buscarVino(vinoId) for vinoId in bodega['vinos']]
-            else:
-                bodegaObj.vinos = [] #Asignamos la lista vacia si no existe
 
             cls._bodegas.append(bodegaObj)
 
             #print("Datos cargados: ", data)
 
-        #Testeos
-        """print(f"Bodegas cargas: {cls._bodegas}")
+        #Depurar
+        print(f"Bodegas cargas: {cls._bodegas}")
         print(f"Cepas cargadas: {cls._cepas}")
-        print(f"Vinos cargados: {cls._vinos}")"""
+        print(f"Vinos cargados: {cls._vinos}")
 
 #Aca inicializamos la vinoteca
 Vinoteca.inicializar()

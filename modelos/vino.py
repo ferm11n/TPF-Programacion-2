@@ -8,7 +8,7 @@ class Vino(EntidadVineria):
         super().__init__(id, nombre) #Llamamos al constructor de la clase base
         self.bodega = bodega
         self.cepas = cepas
-        self.partidas = partidas
+        self.__partidas = partidas
 
     def __repr__(self):
         return json.dumps({"nombre": self.obtenerNombre()})
@@ -28,7 +28,7 @@ class Vino(EntidadVineria):
             "nombre": self.obtenerNombre(),
             "bodega": self.obtenerBodegas().obtenerNombre(),
             "cepas": self.__mapearCepas(),
-            "partidas": self.__partidas,
+            "partidas": self._vino__partidas,
         }
 
     def __mapearCepas(self):
