@@ -1,7 +1,7 @@
 from flask import Flask, Response, jsonify, request
 import json
 
-app = Flask(__name__)
+main = Flask(__name__)
 
 #Cargamos los datos desde el archivo JSON
 with open('vinoteca.json') as f:
@@ -9,7 +9,7 @@ with open('vinoteca.json') as f:
 
 #SEGUNDA PARTE DEL TP
 #EJERCICIO 1
-@app.route('/api/bodegas/<string:bodega_id>', methods=['GET'])
+@main.route('/api/bodegas/<string:bodega_id>', methods=['GET'])
 def getBodega(bodega_id):
     bodega = next((b for b in data['bodegas'] if b['id'] == bodega_id), None)
 
@@ -42,7 +42,7 @@ def getBodega(bodega_id):
 
 
 #EJERCICIO 2
-@app.route('/api/cepas/<string:cepa_id>', methods=['GET'])
+@main.route('/api/cepas/<string:cepa_id>', methods=['GET'])
 def getCepa(cepa_id):
     #Buscar la cepa por id
     cepa = next((c for c in data['cepas'] if c['id'] == cepa_id), None)
@@ -65,7 +65,7 @@ def getCepa(cepa_id):
 
 
 #EJERCICIO 3
-@app.route('/api/vinos/<string:vino_id>', methods=['GET'])
+@main.route('/api/vinos/<string:vino_id>', methods=['GET'])
 def getVino(vino_id):
     #Buscar la cepa por id
     vino = next((v for v in data['vinos'] if v['id'] == vino_id), None)
@@ -92,7 +92,7 @@ def getVino(vino_id):
     return Response(jsonResult, mimetype='application/json')
 
 #EJERCICIO 4
-@app.route('/api/vinos', methods=['GET'])
+@main.route('/api/vinos', methods=['GET'])
 def getVinosPorAnio():
     anio = request.args.get('anio', type=int)
     orden = request.args.get('orden', default='nombre')
@@ -124,7 +124,7 @@ def getVinosPorAnio():
     return Response(jsonResult, mimetype='application/json')
 
 #EJERCICIO 5
-@app.route('/api/vinos', methods=['GET'])
+@main.route('/api/vinos', methods=['GET'])
 def getVinosPorAnioFiltrados():
     anio = request.args.get('anio', type=int)
     orden = request.args.get('orden', default='nombre')
@@ -156,4 +156,4 @@ def getVinosPorAnioFiltrados():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    main.run(debug=True)
